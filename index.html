@@ -1,834 +1,1211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cirqon Technology</title>
-    <meta name="description" content="Cirqon Technology designs advanced electronics for ambitious teams — PCB design, embedded firmware, validation, and manufacturing support in one workflow.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-:root {
-  --bg: #07101f;
-  --text: #f5f7fb;
-  --muted: #95a5c3;
-  --cyan: #19d3ff;
-  --shadow: 0 30px 80px rgba(0,0,0,0.28);
-  --radius: 26px;
-  --radius-sm: 16px;
-  --max-width: 1180px;
-  --mono: "IBM Plex Mono","Courier New",monospace;
-  --sans: "Space Grotesk","Segoe UI",sans-serif;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cirqon Technology — Precision Embedded Systems</title>
+  <meta name="description" content="Cirqon Technology designs advanced electronics for ambitious teams — PCB design, embedded firmware, validation, and manufacturing support in one workflow.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07101f;
+      --bg2: #091224;
+      --text: #f5f7fb;
+      --muted: #95a5c3;
+      --faint: rgba(149,165,195,0.45);
+      --cyan: #19d3ff;
+      --cyan-dim: rgba(25,211,255,0.18);
+      --cyan-glow: rgba(25,211,255,0.08);
+      --border: rgba(25,211,255,0.14);
+      --border-soft: rgba(255,255,255,0.06);
+      --mono: "IBM Plex Mono", monospace;
+      --serif: "Libre Baskerville", Georgia, serif;
+      --sans: "Space Grotesk", sans-serif;
+    }
 
-*,*::before,*::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
 
-body {
-  margin: 0;
-  color: var(--text);
-  font-family: var(--sans);
-  background:
-    linear-gradient(rgba(18,54,102,0.14) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(18,54,102,0.14) 1px, transparent 1px),
-    radial-gradient(circle at 25% 12%, rgba(25,211,255,0.13), transparent 25%),
-    radial-gradient(circle at 75% 32%, rgba(25,211,255,0.08), transparent 18%),
-    linear-gradient(180deg, #091224 0%, #07101f 55%, #08111d 100%);
-  background-size: 28px 28px, 28px 28px, auto, auto, auto;
-}
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image:
+        linear-gradient(rgba(18,54,102,0.10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(18,54,102,0.10) 1px, transparent 1px),
+        radial-gradient(ellipse at 20% 0%, rgba(25,211,255,0.10), transparent 40%),
+        radial-gradient(ellipse at 80% 20%, rgba(25,211,255,0.06), transparent 30%);
+      background-size: 32px 32px, 32px 32px, auto, auto;
+    }
 
-img { max-width: 100%; display: block; }
-a { color: inherit; text-decoration: none; }
-button, input, textarea { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
 
-.site-shell { position: relative; overflow: hidden; }
-.site-shell::before,
-.site-shell::after {
-  content: "";
-  position: fixed;
-  pointer-events: none;
-  z-index: 0;
-  border-radius: 50%;
-}
-.site-shell::before {
-  top: 120px; left: -140px;
-  width: 420px; height: 420px;
-  background: radial-gradient(circle, rgba(25,211,255,0.18), transparent 60%);
-  filter: blur(18px);
-}
-.site-shell::after {
-  right: -120px; top: 400px;
-  width: 360px; height: 360px;
-  background: radial-gradient(circle, rgba(25,211,255,0.1), transparent 64%);
-  filter: blur(24px);
-}
+    /* ─── GLOBAL GLOW ORBS ─── */
+    .orb {
+      position: fixed;
+      pointer-events: none;
+      border-radius: 50%;
+      z-index: 0;
+    }
+    .orb-1 {
+      top: -80px; left: -120px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(25,211,255,0.14), transparent 65%);
+      filter: blur(30px);
+    }
+    .orb-2 {
+      bottom: 200px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(25,211,255,0.09), transparent 65%);
+      filter: blur(28px);
+    }
 
-.container {
-  width: min(calc(100% - 40px), var(--max-width));
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
+    /* ─── CONTAINER ─── */
+    .wrap {
+      width: min(calc(100% - 48px), 980px);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
 
-/* ── HEADER ── */
-.site-header {
-  position: sticky; top: 0; z-index: 10;
-  backdrop-filter: blur(14px);
-  background: rgba(5,10,20,0.78);
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.site-header__inner {
-  min-height: 88px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
+    /* ─── HEADER ─── */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(5,10,20,0.82);
+      backdrop-filter: blur(16px) saturate(1.4);
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+    }
+    .brand-name {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+    .btn-talk {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      border: 1px solid rgba(25,211,255,0.38);
+      padding: 9px 18px;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-talk:hover {
+      background: rgba(25,211,255,0.1);
+    }
 
-.brand {
-  display: inline-flex;
-  align-items: center;
-}
-.brand__logo {
-  height: 52px;
-  width: auto;
-  display: block;
-  /* blend cyan glow logo with dark background */
-  filter: drop-shadow(0 0 10px rgba(25,211,255,0.45));
-}
+    /* ─── CHAPTER LABEL ─── */
+    .chapter-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chapter-label::after {
+      content: "";
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--border);
+    }
 
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.nav a {
-  color: #dce6fb;
-  font-size: 0.98rem;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-.nav a:hover { color: var(--cyan); }
+    /* ─── DIVIDER ─── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border-soft);
+      margin: 0;
+    }
 
-/* ── BUTTONS ── */
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 52px;
-  padding: 0 24px;
-  border-radius: 14px;
-  border: 1px solid transparent;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-}
-.button:hover { transform: translateY(-2px); }
-.button--primary {
-  color: #05111b;
-  background: linear-gradient(135deg, #38e5ff, #18cfff);
-  box-shadow: 0 20px 40px rgba(25,211,255,0.22);
-}
-.button--secondary {
-  color: var(--text);
-  background: rgba(8,18,35,0.5);
-  border-color: rgba(25,211,255,0.42);
-}
-.button--full { width: 100%; }
+    /* ─── SECTION BASE ─── */
+    .section {
+      padding: 100px 0;
+      border-bottom: 1px solid var(--border-soft);
+      position: relative;
+    }
 
-/* ── SECTIONS ── */
-.hero, .section, .contact { padding: 74px 0; }
+    /* ─── HERO ─── */
+    .hero {
+      padding: 120px 0 100px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 7px 14px;
+      border-radius: 2px;
+      margin-bottom: 48px;
+    }
+    .hero-badge .dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--cyan);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .hero-num {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--faint);
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 6vw, 5.2rem);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+      max-width: 820px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--cyan);
+    }
+    .hero-body {
+      font-size: 1.08rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.78;
+      margin-bottom: 48px;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .cta-primary {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--cyan);
+      color: #05111b;
+      padding: 14px 28px;
+      border-radius: 2px;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    .cta-primary:hover { opacity: 0.88; }
+    .cta-secondary {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+    .cta-secondary:hover { color: var(--cyan); }
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  color: var(--cyan);
-  border: 1px solid rgba(25,211,255,0.24);
-  background: rgba(6,17,33,0.76);
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
 
-.accent {
-  color: var(--cyan);
-  text-shadow: 0 0 24px rgba(25,211,255,0.28);
-}
+    /* ─── STAT STRIP ─── */
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 80px;
+    }
+    .stat-item {
+      padding: 28px 32px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 6px;
+    }
+    .stat-desc {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
 
-/* ── HERO ── */
-.hero__grid {
-  display: grid;
-  grid-template-columns: 1.12fr 0.88fr;
-  align-items: center;
-  gap: 28px;
-}
-.hero h1 {
-  font-size: clamp(3.4rem, 8vw, 6.4rem);
-  margin: 22px 0 18px;
-  line-height: 0.98;
-  letter-spacing: -0.05em;
-}
-.hero p {
-  color: var(--muted);
-  max-width: 680px;
-  font-size: 1.2rem;
-  line-height: 1.72;
-}
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 32px;
-}
-.hero__stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 38px;
-}
-.metric {
-  min-width: 175px;
-  padding: 18px 20px;
-  border-radius: 18px;
-  border: 1px solid rgba(25,211,255,0.14);
-  background: rgba(7,16,32,0.88);
-  box-shadow: var(--shadow);
-}
-.metric strong { display: block; font-size: 1.8rem; }
-.metric p { margin: 6px 0 0; font-size: 0.94rem; color: var(--muted); }
+    /* ─── PROBLEM SECTION ─── */
+    .problem-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: end;
+      margin-bottom: 64px;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 400;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--cyan);
+    }
+    .section-body {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.78;
+    }
 
-.hero-card {
-  position: relative;
-  padding: 28px;
-  border-radius: 28px;
-  border: 1px solid rgba(25,211,255,0.14);
-  box-shadow: var(--shadow);
-  background:
-    radial-gradient(circle at top, rgba(25,211,255,0.16), transparent 45%),
-    linear-gradient(180deg, rgba(10,22,44,0.94), rgba(7,15,28,0.96));
-}
-.hero-card::before {
-  content: "";
-  position: absolute;
-  inset: 22px;
-  border-radius: 24px;
-  border: 1px solid rgba(255,255,255,0.05);
-  pointer-events: none;
-}
-.hero-card__label { color: #d9d3ba; font-family: var(--mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
-.hero-card__flow { display: grid; gap: 14px; }
-.flow-step {
-  padding: 18px;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(25,211,255,0.14);
-  background: rgba(7,16,32,0.88);
-}
-.flow-step p { margin: 0; color: var(--muted); line-height: 1.6; }
-.flow-step strong { display: block; margin-bottom: 8px; }
-.flow-step--highlight {
-  background: linear-gradient(180deg, rgba(10,30,54,0.96), rgba(8,17,33,0.96));
-  border-color: rgba(25,211,255,0.34);
-}
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border-soft);
+      border: 1px solid var(--border-soft);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .problem-item {
+      background: var(--bg);
+      padding: 36px 40px;
+      position: relative;
+    }
+    .problem-item::before {
+      content: attr(data-num);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      color: var(--faint);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 20px;
+    }
+    .problem-item h3 {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    .problem-item p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.72;
+    }
 
-/* ── CARD GRID ── */
-.section-header {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 36px;
-}
-.section-title {
-  font-size: clamp(2.2rem, 4vw, 4rem);
-  margin: 22px 0 18px;
-  line-height: 0.98;
-  letter-spacing: -0.05em;
-}
-.section-copy { max-width: 600px; font-size: 1.06rem; color: var(--muted); line-height: 1.72; }
+    /* ─── SERVICES / PROCESS SECTION ─── */
+    .process-header {
+      margin-bottom: 64px;
+    }
+    .process-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .process-step {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 48px;
+      align-items: start;
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border-soft);
+      position: relative;
+    }
+    .step-meta {
+      padding-top: 4px;
+    }
+    .step-num {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      display: block;
+      margin-bottom: 10px;
+    }
+    .step-tag {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      color: var(--cyan);
+      border: 1px solid rgba(25,211,255,0.28);
+      padding: 5px 10px;
+      border-radius: 2px;
+      display: inline-block;
+      text-transform: uppercase;
+    }
+    .step-content h3 {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 14px;
+      letter-spacing: -0.01em;
+    }
+    .step-content p {
+      font-size: 0.96rem;
+      color: var(--muted);
+      line-height: 1.78;
+      max-width: 520px;
+    }
 
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 22px;
-}
-.card {
-  padding: 28px;
-  min-height: 250px;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(25,211,255,0.14);
-  background: rgba(7,16,32,0.88);
-  box-shadow: var(--shadow);
-}
-.card__icon {
-  width: 54px; height: 54px;
-  border-radius: 16px;
-  display: grid; place-items: center;
-  background: rgba(14,41,76,0.8);
-  color: var(--cyan);
-  font-family: var(--mono);
-  margin-bottom: 22px;
-}
-.card h3 { margin: 0 0 14px; font-size: 1.5rem; letter-spacing: -0.03em; }
-.card p { margin: 0; color: var(--muted); line-height: 1.6; }
+    /* ─── SERVICES GRID ─── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border-soft);
+      border: 1px solid var(--border-soft);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 64px;
+    }
+    .service-card {
+      background: var(--bg);
+      padding: 36px 32px;
+      transition: background 0.3s;
+    }
+    .service-card:hover {
+      background: rgba(25,211,255,0.03);
+    }
+    .service-icon {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 22px;
+      display: block;
+    }
+    .service-card h3 {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
 
-/* ── PROCESS ── */
-.story-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
-}
-.story-panel {
-  padding: 34px;
-  border-radius: 28px;
-  border: 1px solid rgba(25,211,255,0.14);
-  background: rgba(7,16,32,0.88);
-  box-shadow: var(--shadow);
-}
-.story-panel p { font-size: 1.08rem; color: var(--muted); line-height: 1.72; }
-.story-points { display: grid; gap: 14px; margin-top: 14px; }
-.story-point { padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.08); }
-.story-point strong { display: block; margin-bottom: 8px; color: var(--cyan); }
-.story-image {
-  min-height: 520px;
-  border-radius: 28px;
-  border: 1px solid rgba(25,211,255,0.14);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  background:
-    linear-gradient(145deg, rgba(255,255,255,0.08), transparent 35%),
-    radial-gradient(circle at 75% 30%, rgba(25,211,255,0.3), transparent 18%),
-    linear-gradient(180deg, rgba(7,19,36,0.25), rgba(7,19,36,0.8)),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='1200' viewBox='0 0 1200 1200'%3E%3Crect width='1200' height='1200' fill='%23dfe7ef'/%3E%3Crect x='630' y='110' width='320' height='160' rx='12' fill='%23242529'/%3E%3Crect x='330' y='190' width='430' height='250' rx='18' fill='%23f7f8fa'/%3E%3Crect x='470' y='450' width='240' height='170' rx='14' fill='%23f7f8fa'/%3E%3Ccircle cx='1000' cy='170' r='40' fill='%23d1d8df'/%3E%3Crect x='250' y='85' width='120' height='160' rx='14' fill='%232d3137'/%3E%3Cpath d='M316 504c98 26 190 82 259 158 77 85 123 180 140 286' stroke='%23242529' stroke-width='30' fill='none' stroke-linecap='round' opacity='.75'/%3E%3Cpath d='M344 347l325 0' stroke='%23cfd6dd' stroke-width='8'/%3E%3Cpath d='M344 372l280 0' stroke='%23cfd6dd' stroke-width='8'/%3E%3Cpath d='M344 397l225 0' stroke='%23cfd6dd' stroke-width='8'/%3E%3Cpath d='M720 760l220-130' stroke='%23cfd6dd' stroke-width='16' stroke-linecap='round'/%3E%3Cpath d='M880 610l150 90' stroke='%23cfd6dd' stroke-width='16' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-size: cover;
-  background-position: center;
-}
+    /* ─── PHILOSOPHY / QUOTE ─── */
+    .philosophy {
+      padding: 120px 0;
+      border-bottom: 1px solid var(--border-soft);
+      text-align: center;
+    }
+    .philosophy blockquote {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.3;
+      max-width: 780px;
+      margin: 0 auto 32px;
+      letter-spacing: -0.01em;
+    }
+    .philosophy blockquote em {
+      color: var(--cyan);
+      font-style: normal;
+    }
+    .quote-attr {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
 
-/* ── CONTACT ── */
-.contact-wrap {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
-}
-.waitlist-panel {
-  padding: 34px;
-  border-radius: 28px;
-  border: 1px solid rgba(25,211,255,0.14);
-  box-shadow: var(--shadow);
-  background:
-    linear-gradient(180deg, rgba(245,241,232,0.06), rgba(245,241,232,0.01)),
-    rgba(7,16,32,0.92);
-}
-.panel-kicker {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #d9d3ba;
-  margin-bottom: 10px;
-}
-.waitlist-form { display: grid; gap: 16px; margin-top: 16px; }
-.waitlist-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.field { display: grid; gap: 8px; }
-.field label {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #f0f4fb;
-}
-.field input, .field textarea {
-  width: 100%; padding: 16px 18px;
-  border: 1px solid rgba(233,225,204,0.18);
-  background: rgba(244,239,229,0.03);
-  color: var(--text);
-  outline: none;
-  border-radius: 8px;
-}
-.field input::placeholder, .field textarea::placeholder { color: #9ba6bc; }
-.field input:focus, .field textarea:focus {
-  border-color: rgba(25,211,255,0.48);
-  box-shadow: 0 0 0 4px rgba(25,211,255,0.08);
-}
-.checkbox {
-  display: flex; align-items: center; gap: 12px;
-  padding: 16px 18px;
-  border: 1px solid rgba(233,225,204,0.18);
-  background: rgba(244,239,229,0.03);
-  color: #dde5f5;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.checkbox input { width: 18px; height: 18px; accent-color: var(--cyan); }
-.waitlist-note {
-  margin: 4px 0 0;
-  font-family: var(--mono);
-  font-size: 0.82rem;
-  color: var(--muted);
-}
+    /* ─── MOMENTS / LABS ─── */
+    .moments-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 64px;
+    }
+    .moment-card {
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+    }
+    .moment-num {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .moment-card h3 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+    .moment-card h3 em {
+      font-style: italic;
+      color: var(--cyan);
+    }
+    .moment-card p {
+      font-size: 0.93rem;
+      color: var(--muted);
+      line-height: 1.72;
+    }
 
-.contact-panel {
-  padding: 34px;
-  border-radius: 28px;
-  border: 1px solid rgba(25,211,255,0.14);
-  background: rgba(7,16,32,0.88);
-  box-shadow: var(--shadow);
-  display: grid;
-  gap: 22px;
-  align-content: start;
-}
-.contact-panel h3 { margin: 0 0 10px; font-size: 2rem; letter-spacing: -0.04em; }
-.contact-panel > p { margin: 0; color: var(--muted); line-height: 1.72; }
-.info-block { display: grid; gap: 14px; }
-.info-item { display: grid; grid-template-columns: 54px 1fr; gap: 14px; align-items: start; }
-.info-item__icon {
-  width: 54px; height: 54px;
-  border-radius: 16px;
-  display: grid; place-items: center;
-  background: rgba(14,41,76,0.8);
-  color: var(--cyan);
-  font-family: var(--mono);
-}
-.info-item strong { display: block; margin-bottom: 4px; }
-.info-item span { color: var(--muted); line-height: 1.6; font-size: 0.95rem; }
-.info-item a { color: var(--cyan); }
-.contact-callout {
-  padding: 24px;
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(25,211,255,0.2);
-  background: rgba(10,23,44,0.9);
-}
-.contact-callout strong { display: block; margin-bottom: 8px; }
-.contact-callout p { margin: 0 0 16px; color: var(--muted); line-height: 1.6; }
+    /* ─── WAITLIST / CONTACT ─── */
+    .contact-section {
+      padding: 100px 0;
+    }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contact-form-wrap h2 {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      font-weight: 400;
+      margin-bottom: 12px;
+      line-height: 1.15;
+    }
+    .contact-form-wrap .sub {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+    .form-grid {
+      display: grid;
+      gap: 20px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .field label {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .field input,
+    .field textarea {
+      width: 100%;
+      background: rgba(25,211,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      padding: 13px 16px;
+      border-radius: 2px;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field input:focus,
+    .field textarea:focus {
+      border-color: rgba(25,211,255,0.4);
+    }
+    .field input::placeholder,
+    .field textarea::placeholder { color: rgba(149,165,195,0.5); }
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .checkbox-row input[type="checkbox"] {
+      accent-color: var(--cyan);
+      width: 16px; height: 16px;
+    }
+    .submit-btn {
+      width: 100%;
+      background: var(--cyan);
+      color: #05111b;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border: none;
+      padding: 16px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .submit-btn:hover { opacity: 0.88; }
+    .form-note {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--faint);
+      margin-top: 10px;
+    }
 
-/* ── FOOTER ── */
-.site-footer {
-  padding: 34px 0 44px;
-  border-top: 1px solid rgba(255,255,255,0.07);
-}
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1.4fr 0.7fr 0.9fr 0.8fr;
-  gap: 28px;
-  margin-bottom: 28px;
-}
-.footer-logo { height: 40px; width: auto; filter: drop-shadow(0 0 8px rgba(25,211,255,0.35)); }
-.footer-copy { max-width: 340px; line-height: 1.7; color: var(--muted); margin-top: 14px; font-size: 0.95rem; }
-.footer-title {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #f0f4fb;
-  margin: 0 0 14px;
-}
-.footer-links { display: grid; gap: 10px; }
-.footer-links a { color: var(--muted); font-size: 0.95rem; transition: color 0.2s; }
-.footer-links a:hover { color: var(--cyan); }
-.footer-socials { display: flex; gap: 12px; }
-.social {
-  width: 44px; height: 44px;
-  border-radius: 12px;
-  display: grid; place-items: center;
-  background: rgba(14,41,76,0.8);
-  color: var(--cyan);
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  border: 1px solid rgba(25,211,255,0.18);
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.social:hover { border-color: rgba(25,211,255,0.5); box-shadow: 0 0 12px rgba(25,211,255,0.2); }
-.footer-meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  padding-top: 24px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--muted);
-}
+    /* contact info panel */
+    .contact-info {
+      padding-top: 8px;
+    }
+    .contact-info .eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 20px;
+      display: block;
+    }
+    .contact-info h3 {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .contact-info > p {
+      font-size: 0.94rem;
+      color: var(--muted);
+      line-height: 1.78;
+      margin-bottom: 40px;
+    }
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .info-entry {
+      display: flex;
+      gap: 20px;
+      align-items: start;
+      padding: 20px 0;
+      border-top: 1px solid var(--border-soft);
+    }
+    .info-entry-num {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--cyan);
+      letter-spacing: 0.08em;
+      padding-top: 2px;
+      min-width: 24px;
+    }
+    .info-entry strong {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    .info-entry span {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .callout-box {
+      border: 1px solid var(--border);
+      padding: 24px;
+      border-radius: 2px;
+      margin-top: 32px;
+    }
+    .callout-box strong {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .callout-box p {
+      font-size: 0.87rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+    .callout-link {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      border: 1px solid rgba(25,211,255,0.3);
+      padding: 10px 16px;
+      border-radius: 2px;
+      display: inline-block;
+      transition: background 0.2s;
+    }
+    .callout-link:hover { background: rgba(25,211,255,0.08); }
 
-/* ── REVEAL ANIMATION ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(26px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+    /* ─── FOOTER ─── */
+    .site-footer {
+      border-top: 1px solid var(--border-soft);
+      padding: 56px 0 40px;
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 16px;
+    }
+    .footer-copy {
+      font-size: 0.88rem;
+      color: var(--faint);
+      line-height: 1.68;
+    }
+    .footer-col h4 {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 18px;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--cyan); }
+    .footer-bottom {
+      border-top: 1px solid var(--border-soft);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-bottom span {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      color: var(--faint);
+    }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 1080px) {
-  .hero__grid, .story-grid, .contact-wrap, .footer-grid, .section-header {
-    grid-template-columns: 1fr;
-  }
-  .section-header { align-items: start; }
-  .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
+    /* ─── REVEAL ANIMATIONS ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
 
-@media (max-width: 780px) {
-  .site-header__inner { flex-wrap: wrap; justify-content: center; padding: 18px 0; }
-  .hero, .section, .contact { padding: 56px 0; }
-  .hero h1 { font-size: clamp(2.9rem, 15vw, 4.5rem); }
-  .card-grid, .waitlist-form__row { grid-template-columns: 1fr; }
-  .container { width: min(calc(100% - 28px), var(--max-width)); }
-  .hero-card, .card, .story-panel, .waitlist-panel, .contact-panel { padding: 22px; }
-  .footer-meta { flex-direction: column; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
-}
+    /* ─── DECORATIVE LINE ─── */
+    .marquee-strip {
+      overflow: hidden;
+      border-top: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 12px 0;
+      background: rgba(25,211,255,0.02);
+    }
+    .marquee-inner {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 28s linear infinite;
+    }
+    .marquee-inner span {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      padding: 0 40px;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
 
-@media (max-width: 480px) {
-  .footer-grid { grid-template-columns: 1fr; }
-  .nav { gap: 14px; }
-}
-    </style>
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .wrap { width: calc(100% - 32px); }
+      .header-inner { flex-wrap: wrap; gap: 14px; }
+      .nav-links { display: none; }
+      .hero h1 { font-size: 2.4rem; }
+      .stat-strip { grid-template-columns: 1fr; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .problem-header { grid-template-columns: 1fr; gap: 24px; }
+      .problem-grid { grid-template-columns: 1fr; }
+      .process-step { grid-template-columns: 1fr; gap: 16px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .moments-grid { grid-template-columns: 1fr; }
+      .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+  </style>
 </head>
 <body>
-<div class="site-shell">
 
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="container site-header__inner">
-      <a class="brand" href="#top" aria-label="Cirqon Technology">
-        <img class="brand__logo" src="data:image/png;base64,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" alt="Cirqon Technology">
-      </a>
-      <nav class="nav" aria-label="Primary">
-        <a href="#top">Home</a>
-        <a href="#services">Services</a>
-        <a href="#process">Process</a>
-        <a href="#labs">Labs</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </nav>
-      <a class="button button--primary" href="#contact">Get started</a>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- ═══ HEADER ═══ -->
+<header class="site-header">
+  <div class="wrap header-inner">
+    <span class="brand-name">Cirqon Technology</span>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#labs">Labs</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <a class="btn-talk" href="#contact">Talk to us →</a>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Embedded systems · PCB Design · Firmware
     </div>
-  </header>
 
-  <main id="top">
+    <p class="hero-num">Chapter I · Thesis</p>
+    <h1 class="reveal">
+      Precision engineering for teams building <em>serious hardware</em>.
+    </h1>
+    <p class="hero-body reveal reveal-delay-1">
+      Cirqon Technology designs advanced electronics for ambitious teams — PCB design, embedded firmware, validation, and manufacturing support in one workflow. From napkin sketch to production-ready.
+    </p>
+    <div class="hero-cta reveal reveal-delay-2">
+      <a class="cta-primary" href="#contact">Join the waitlist →</a>
+      <a class="cta-secondary" href="#services">Explore services</a>
+    </div>
 
-    <!-- HERO -->
-    <section class="hero">
-      <div class="container hero__grid">
-        <div class="reveal">
-          <div class="eyebrow">Next-generation embedded systems</div>
-          <h1>Powering the future with <span class="accent">precision engineering</span>.</h1>
-          <p>Cirqon Technology designs advanced electronics for ambitious teams that need faster iteration, stronger technical execution, and a more transparent path from concept to production.</p>
-          <div class="hero__actions">
-            <a class="button button--primary" href="#contact">Talk to us</a>
-            <a class="button button--secondary" href="#services">Explore services</a>
-          </div>
-          <div class="hero__stats">
-            <div class="metric">
-              <strong>48h</strong>
-              <p>Rapid architecture reviews and technical feasibility feedback for early-stage programs.</p>
-            </div>
-            <div class="metric">
-              <strong>End-to-end</strong>
-              <p>PCB design, embedded firmware, validation, and manufacturing support in one workflow.</p>
-            </div>
-            <div class="metric">
-              <strong>Low drag</strong>
-              <p>Clear engineering communication and fewer black-box handoffs across the program lifecycle.</p>
-            </div>
-          </div>
-        </div>
-        <aside class="hero-card reveal">
-          <div class="hero-card__label">Program snapshot</div>
-          <div class="hero-card__flow">
-            <div class="flow-step">
-              <strong>01. Discovery + architecture</strong>
-              <p>We map constraints, define the system, and identify the fastest route to a reliable first build.</p>
-            </div>
-            <div class="flow-step flow-step--highlight">
-              <strong>02. Design + implementation</strong>
-              <p>Hardware, firmware, routing, debug planning, and supplier-aware decisions handled as one integrated stream.</p>
-            </div>
-            <div class="flow-step">
-              <strong>03. Validation + launch readiness</strong>
-              <p>Prototype bring-up, design verification, and production preparation reduce friction at the point that usually hurts most.</p>
-            </div>
-          </div>
-        </aside>
+    <div class="stat-strip reveal reveal-delay-3">
+      <div class="stat-item">
+        <span class="stat-num">48h</span>
+        <span class="stat-desc">Architecture reviews &amp; feasibility feedback</span>
       </div>
-    </section>
-
-    <!-- SERVICES -->
-    <section class="section" id="services">
-      <div class="container">
-        <div class="section-header reveal">
-          <div>
-            <div class="eyebrow">Engineering services</div>
-            <h2 class="section-title">Deep expertise across the <span class="accent">full hardware stack</span>.</h2>
-          </div>
-          <p class="section-copy">From early-stage feasibility through production-ready delivery — we handle the technical complexity so your team can move faster.</p>
-        </div>
-        <div class="card-grid">
-          <article class="card reveal">
-            <div class="card__icon">01</div>
-            <h3>Hardware Architecture</h3>
-            <p>System-level design, part selection, tradeoff analysis, and feasibility planning before major costs get locked in.</p>
-          </article>
-          <article class="card reveal">
-            <div class="card__icon">02</div>
-            <h3>PCB Layout &amp; Routing</h3>
-            <p>High-speed, multi-layer board design with signal integrity, thermal awareness, and manufacturing constraints in view.</p>
-          </article>
-          <article class="card reveal">
-            <div class="card__icon">03</div>
-            <h3>Embedded Firmware</h3>
-            <p>Reliable firmware for ARM, ESP32, RTOS-based systems, and custom embedded platforms that need to ship cleanly.</p>
-          </article>
-          <article class="card reveal">
-            <div class="card__icon">04</div>
-            <h3>Validation &amp; Compliance</h3>
-            <p>Bench testing, verification strategy, and pre-compliance thinking that catches issues earlier and more cheaply.</p>
-          </article>
-          <article class="card reveal">
-            <div class="card__icon">05</div>
-            <h3>DFM &amp; Production</h3>
-            <p>Design for manufacturability support, documentation prep, and supplier-aware decisions for smoother scale-up.</p>
-          </article>
-          <article class="card reveal">
-            <div class="card__icon">06</div>
-            <h3>Reverse Engineering</h3>
-            <p>Recovery and modernization work for aging electronics that need to be understood, repaired, or redesigned fast.</p>
-          </article>
-        </div>
+      <div class="stat-item">
+        <span class="stat-num">End-to-end</span>
+        <span class="stat-desc">PCB · firmware · validation · manufacturing</span>
       </div>
-    </section>
-
-    <!-- PROCESS -->
-    <section class="section" id="process">
-      <div class="container story-grid">
-        <div class="story-panel reveal">
-          <div class="eyebrow">Built for execution</div>
-          <h2 class="section-title">Startup energy, without sacrificing <span class="accent">engineering discipline</span>.</h2>
-          <p>We bring clarity and confidence to every program — fast iteration without cutting corners on the decisions that matter most.</p>
-          <div class="story-points">
-            <div class="story-point">
-              <strong>Transparent process</strong>
-              Clear milestones, technical visibility, and direct engineering communication from kickoff through handoff.
-            </div>
-            <div class="story-point">
-              <strong>Designed to convert ideas</strong>
-              We take projects from napkin sketch to production-ready hardware through a structured, low-friction workflow.
-            </div>
-            <div class="story-point">
-              <strong>Consistent visual language</strong>
-              Every deliverable — schematics, firmware, documentation — follows the same disciplined, client-facing standard.
-            </div>
-          </div>
-        </div>
-        <div class="story-image reveal" role="img" aria-label="Engineering workspace"></div>
-      </div>
-    </section>
-
-    <!-- LABS -->
-    <section class="section" id="labs">
-      <div class="container">
-        <div class="section-header reveal">
-          <div>
-            <div class="eyebrow">Labs</div>
-            <h2 class="section-title">R&amp;D experiments and <span class="accent">future-facing builds</span>.</h2>
-          </div>
-          <p class="section-copy">A dedicated space for exploratory platforms, internal prototypes, and next-generation innovation showcases.</p>
-        </div>
-        <div class="card-grid">
-          <article class="card reveal">
-            <div class="card__icon">L1</div>
-            <h3>Rapid concept sprints</h3>
-            <p>Short exploratory efforts for proving technical direction before committing to a full development cycle.</p>
-          </article>
-          <article class="card reveal">
-            <div class="card__icon">L2</div>
-            <h3>Platform experiments</h3>
-            <p>Evaluation of new architectures, modules, and firmware patterns that could become future client offerings.</p>
-          </article>
-          <article class="card reveal">
-            <div class="card__icon">L3</div>
-            <h3>Advanced integration</h3>
-            <p>AI-assisted hardware workflows, edge intelligence, and specialized embedded systems research.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section class="section" id="about">
-      <div class="container">
-        <div class="section-header reveal">
-          <div>
-            <div class="eyebrow">About Cirqon</div>
-            <h2 class="section-title">Built for teams shipping <span class="accent">serious hardware</span>.</h2>
-          </div>
-          <p class="section-copy">We work with founders, product leaders, and engineering teams who need a reliable technical partner — not a black box.</p>
-        </div>
-        <div class="card-grid">
-          <article class="card reveal">
-            <div class="card__icon">A</div>
-            <h3>Precision first</h3>
-            <p>We prioritize simulation, validation, and disciplined decisions before problems multiply across hardware and firmware.</p>
-          </article>
-          <article class="card reveal">
-            <div class="card__icon">B</div>
-            <h3>Clear communication</h3>
-            <p>No vague updates. Clients get direct insight into design rationale, constraints, blockers, and next steps.</p>
-          </article>
-          <article class="card reveal">
-            <div class="card__icon">C</div>
-            <h3>Production mindset</h3>
-            <p>Even at prototype stage, decisions are made with sourcing, assembly, testing, and long-term reliability in view.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="contact" id="contact">
-      <div class="container contact-wrap">
-        <div class="waitlist-panel reveal">
-          <div class="panel-kicker">Talk to us</div>
-          <h2 class="section-title">Get early access.</h2>
-          <p class="section-copy">Join the waitlist and tell us about your project. We review responses manually and onboard based on fit.</p>
-          <form class="waitlist-form" action="https://formspree.io/f/mkoynaae" method="POST">
-            <div class="waitlist-form__row">
-              <div class="field">
-                <label for="cirqon-email">Work email</label>
-                <input id="cirqon-email" name="email" type="email" placeholder="you@company.com" required>
-              </div>
-              <div class="field">
-                <label for="cirqon-role">Your role</label>
-                <input id="cirqon-role" name="role" type="text" placeholder="Founder, EE team, operations">
-              </div>
-            </div>
-            <div class="field">
-              <label for="cirqon-project">Project type</label>
-              <input id="cirqon-project" name="project_type" type="text" placeholder="PCB design, firmware, validation, full system">
-            </div>
-            <div class="field">
-              <label for="cirqon-details">What do you need help with?</label>
-              <textarea id="cirqon-details" name="details" rows="5" placeholder="Describe your project, timeline, or what you'd want Cirqon Technology to help with."></textarea>
-            </div>
-            <label class="checkbox">
-              <input type="checkbox" name="qualified">
-              <span>I would be willing to pay for this service</span>
-            </label>
-            <button class="button button--primary button--full" type="submit">Join the waitlist</button>
-            <p class="waitlist-note">Use a real email and a specific background — we review early access manually.</p>
-          </form>
-        </div>
-
-        <aside class="contact-panel reveal">
-          <div>
-            <div class="eyebrow">Contact information</div>
-            <h3>Let's build something exceptional.</h3>
-          </div>
-          <p>Whether you're at the concept stage or need production-ready support, we're ready to talk through your program.</p>
-          <div class="info-block">
-            <div class="info-item">
-              <div class="info-item__icon">01</div>
-              <div>
-                <strong>Email</strong>
-                <span><a href="mailto:info@cirqon.io">info@cirqon.io</a></span>
-              </div>
-            </div>
-            <div class="info-item">
-              <div class="info-item__icon">02</div>
-              <div>
-                <strong>Specialties</strong>
-                <span>Embedded systems, PCB design, firmware, validation, reverse engineering, and production readiness.</span>
-              </div>
-            </div>
-            <div class="info-item">
-              <div class="info-item__icon">03</div>
-              <div>
-                <strong>Response time</strong>
-                <span>We aim to respond to all inquiries within 24–48 hours.</span>
-              </div>
-            </div>
-          </div>
-          <div class="contact-callout">
-            <strong>Secure file transfer</strong>
-            <p>Need to share schematics or NDA material? Ask for a secure upload link after your first message.</p>
-            <a class="button button--secondary button--full" href="mailto:info@cirqon.io?subject=Secure%20Upload%20Request">Request secure link</a>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <a href="#top" aria-label="Cirqon Technology">
-            <img class="footer-logo" src="data:image/png;base64,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" alt="Cirqon Technology">
-          </a>
-          <p class="footer-copy">Advanced circuit design and embedded systems solutions for modern electronics. Powering the future with precision.</p>
-        </div>
-        <div>
-          <h3 class="footer-title">Quick links</h3>
-          <div class="footer-links">
-            <a href="#top">Home</a>
-            <a href="#services">Services</a>
-            <a href="#labs">Labs</a>
-            <a href="#about">About</a>
-          </div>
-        </div>
-        <div>
-          <h3 class="footer-title">Contact</h3>
-          <div class="footer-links">
-            <a href="mailto:info@cirqon.io">info@cirqon.io</a>
-            <a href="#contact">Start a project</a>
-          </div>
-        </div>
-        <div>
-          <h3 class="footer-title">Follow us</h3>
-          <div class="footer-socials">
-            <a class="social" href="#" aria-label="LinkedIn">in</a>
-            <a class="social" href="#" aria-label="Twitter">tw</a>
-            <a class="social" href="#" aria-label="GitHub">gh</a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-meta">
-        <span>&copy; 2026 Cirqon Technology. All rights reserved.</span>
-        <span>Privacy Policy &nbsp;|&nbsp; Terms of Service</span>
+      <div class="stat-item">
+        <span class="stat-num">Low drag</span>
+        <span class="stat-desc">Clear communication, fewer black-box handoffs</span>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span>Hardware Architecture</span>
+    <span>◦</span>
+    <span>PCB Layout &amp; Routing</span>
+    <span>◦</span>
+    <span>Embedded Firmware</span>
+    <span>◦</span>
+    <span>Validation &amp; Compliance</span>
+    <span>◦</span>
+    <span>DFM &amp; Production</span>
+    <span>◦</span>
+    <span>Reverse Engineering</span>
+    <span>◦</span>
+    <span>Hardware Architecture</span>
+    <span>◦</span>
+    <span>PCB Layout &amp; Routing</span>
+    <span>◦</span>
+    <span>Embedded Firmware</span>
+    <span>◦</span>
+    <span>Validation &amp; Compliance</span>
+    <span>◦</span>
+    <span>DFM &amp; Production</span>
+    <span>◦</span>
+    <span>Reverse Engineering</span>
+    <span>◦</span>
+  </div>
 </div>
 
+<!-- ═══ PROBLEM ═══ -->
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="chapter-label">Chapter II · The Gap</div>
+    <div class="problem-header">
+      <h2 class="section-title reveal">
+        Hardware teams move fast. <em>Quality got left behind.</em>
+      </h2>
+      <p class="section-body reveal reveal-delay-1">
+        Most electronics contractors chase volume, not depth. Very few are built for the one thing that actually matters: clear engineering execution you can trust at every stage.
+      </p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-item reveal" data-num="01">
+        <h3>Speed over discipline.</h3>
+        <p>Many vendors optimise for throughput, not for the careful decisions that keep hardware reliable through validation and production.</p>
+      </div>
+      <div class="problem-item reveal reveal-delay-1" data-num="02">
+        <h3>Good design is slow and expensive.</h3>
+        <p>Handcrafted embedded systems still take months. Most startups can't sustain that pace. Most teams can't afford a full-time EE team.</p>
+      </div>
+      <div class="problem-item reveal reveal-delay-2" data-num="03">
+        <h3>Templates hide complexity.</h3>
+        <p>A polished reference design can hide the problem it's meant to solve. Looking finished is not the same as being manufacturable.</p>
+      </div>
+      <div class="problem-item reveal reveal-delay-3" data-num="04">
+        <h3>Trust is the real product.</h3>
+        <p>If an engineering partner feels opaque or evasive, teams disengage quietly. The bar isn't just speed — it's the feeling that someone actually knows.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROCESS ═══ -->
+<section class="section" id="process">
+  <div class="wrap">
+    <div class="chapter-label">Chapter III · The Instrument</div>
+    <div class="process-header">
+      <h2 class="section-title reveal">
+        Describe it. <em>Cirqon builds it.</em>
+      </h2>
+      <p class="section-body reveal reveal-delay-1" style="margin-top:16px; max-width:540px;">
+        Fast to start, disciplined to execute, and designed for hardware-heavy programs from day one.
+      </p>
+    </div>
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="step-meta">
+          <span class="step-num">Step 01</span>
+          <span class="step-tag">Discovery</span>
+        </div>
+        <div class="step-content">
+          <h3>Tell us what you need to build.</h3>
+          <p>We map constraints, define the system architecture, and identify the fastest route to a reliable first build — before major costs get locked in.</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-meta">
+          <span class="step-num">Step 02</span>
+          <span class="step-tag">Design</span>
+        </div>
+        <div class="step-content">
+          <h3>Cirqon designs and implements the system.</h3>
+          <p>Hardware, firmware, routing, debug planning, and supplier-aware decisions handled as one integrated stream — not fragmented across vendors.</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-meta">
+          <span class="step-num">Step 03</span>
+          <span class="step-tag">Validate</span>
+        </div>
+        <div class="step-content">
+          <h3>Ship with confidence.</h3>
+          <p>Prototype bring-up, design verification, and production preparation reduce friction at the point that usually hurts most — handoff to manufacturing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SERVICES ═══ -->
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="chapter-label">Chapter IV · Deep Expertise</div>
+    <h2 class="section-title reveal">
+      Across the full <em>hardware stack</em>.
+    </h2>
+    <p class="section-body reveal reveal-delay-1" style="margin-top:16px; max-width:560px;">
+      From early-stage feasibility through production-ready delivery — we handle the technical complexity so your team can move faster.
+    </p>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <span class="service-icon">Svc 01</span>
+        <h3>Hardware Architecture</h3>
+        <p>System-level design, part selection, tradeoff analysis, and feasibility planning before major costs get locked in.</p>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <span class="service-icon">Svc 02</span>
+        <h3>PCB Layout &amp; Routing</h3>
+        <p>High-speed, multi-layer board design with signal integrity, thermal awareness, and manufacturing constraints in view.</p>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <span class="service-icon">Svc 03</span>
+        <h3>Embedded Firmware</h3>
+        <p>Reliable firmware for ARM, ESP32, RTOS-based systems, and custom embedded platforms that need to ship cleanly.</p>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon">Svc 04</span>
+        <h3>Validation &amp; Compliance</h3>
+        <p>Bench testing, verification strategy, and pre-compliance thinking that catches issues earlier and more cheaply.</p>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <span class="service-icon">Svc 05</span>
+        <h3>DFM &amp; Production</h3>
+        <p>Design for manufacturability support, documentation prep, and supplier-aware decisions for smoother scale-up.</p>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <span class="service-icon">Svc 06</span>
+        <h3>Reverse Engineering</h3>
+        <p>Recovery and modernization work for aging electronics that need to be understood, repaired, or redesigned fast.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PHILOSOPHY ═══ -->
+<section class="philosophy">
+  <div class="wrap">
+    <div class="chapter-label" style="justify-content:center; margin-bottom:48px;">Chapter V · Philosophy</div>
+    <blockquote class="reveal">
+      "The best way to ship reliable hardware is to watch every decision being made, <em>step by step</em>."
+    </blockquote>
+    <p class="quote-attr reveal reveal-delay-1">Working principle, Cirqon Technology</p>
+  </div>
+</section>
+
+<!-- ═══ LABS / MOMENTS ═══ -->
+<section class="section" id="labs">
+  <div class="wrap">
+    <div class="chapter-label">Chapter VI · Labs</div>
+    <h2 class="section-title reveal">
+      What working with <em>Cirqon</em> feels like. Four small <em>moments</em>.
+    </h2>
+    <div class="moments-grid">
+      <div class="moment-card reveal">
+        <span class="moment-num">N° 01 · The brief</span>
+        <h3>You share a <em>napkin sketch</em>. Nothing polished, nothing perfect.</h3>
+        <p>A half-formed idea from a product meeting. A thing a customer asked that you couldn't answer without a whiteboard. That is enough to begin.</p>
+      </div>
+      <div class="moment-card reveal reveal-delay-1">
+        <span class="moment-num">N° 02 · The architecture</span>
+        <h3>The first <em>schematic block</em> appears. Then a plan.</h3>
+        <p>Cirqon thinks the way a careful engineer thinks — slowly enough to catch the critical tradeoffs, not so slowly that momentum is lost. The pause is the precision.</p>
+      </div>
+      <div class="moment-card reveal">
+        <span class="moment-num">N° 03 · The build</span>
+        <h3>A <em>PCB</em> comes together, one decision at a time.</h3>
+        <p>You don't receive a finished board. You watch an argument. Each layer says: because of this constraint, therefore that choice. By the last trace, you understand the design.</p>
+      </div>
+      <div class="moment-card reveal reveal-delay-1">
+        <span class="moment-num">N° 04 · The handoff</span>
+        <h3>You <em>ship it</em>. The factory understands.</h3>
+        <p>A complete production package is easier to hand off than three months of ad hoc files. Easier to reproduce. Easier to certify. That's the whole product, really.</p>
+      </div>
+    </div>
+
+    <!-- Labs R&D Cards -->
+    <div style="margin-top:64px;">
+      <p class="chapter-label">R&amp;D Experiments</p>
+      <div class="services-grid" style="margin-top:24px;">
+        <div class="service-card reveal">
+          <span class="service-icon">L1</span>
+          <h3>Rapid concept sprints</h3>
+          <p>Short exploratory efforts for proving technical direction before committing to a full development cycle.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-1">
+          <span class="service-icon">L2</span>
+          <h3>Platform experiments</h3>
+          <p>Evaluation of new architectures, modules, and firmware patterns that could become future client offerings.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-2">
+          <span class="service-icon">L3</span>
+          <h3>Advanced integration</h3>
+          <p>AI-assisted hardware workflows, edge intelligence, and specialized embedded systems research.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section class="contact-section" id="contact">
+  <div class="wrap">
+    <div class="chapter-label">Chapter VII · Early Access</div>
+    <div class="contact-inner">
+      <div class="contact-form-wrap reveal">
+        <h2>Get early access.</h2>
+        <p class="sub">Join the waitlist and tell us about your project. We review responses manually and onboard based on fit.</p>
+        <form class="form-grid" action="https://formspree.io/f/mkoynaae" method="POST">
+          <input type="text" name="_honey" style="display:none">
+          <div class="form-row">
+            <div class="field">
+              <label for="email">Work email</label>
+              <input id="email" name="email" type="email" placeholder="you@company.com" required>
+            </div>
+            <div class="field">
+              <label for="role">Your role</label>
+              <input id="role" name="role" type="text" placeholder="Founder, EE lead, PM…">
+            </div>
+          </div>
+          <div class="field">
+            <label for="project_type">Project type</label>
+            <input id="project_type" name="project_type" type="text" placeholder="PCB design, firmware, validation, full system…">
+          </div>
+          <div class="field">
+            <label for="details">What do you need help with?</label>
+            <textarea id="details" name="details" rows="5" placeholder="Describe your project, timeline, or what you'd want Cirqon to help with."></textarea>
+          </div>
+          <label class="checkbox-row">
+            <input type="checkbox" name="qualified">
+            <span>I would be willing to pay for this service</span>
+          </label>
+          <button class="submit-btn" type="submit">Join the Waitlist →</button>
+          <p class="form-note">Use a real email and a specific background — we review early access manually.</p>
+        </form>
+      </div>
+
+      <aside class="contact-info reveal reveal-delay-1">
+        <span class="eyebrow">Contact information</span>
+        <h3>Let's build something exceptional.</h3>
+        <p>Whether you're at concept stage or need production-ready support, we're ready to talk through your program.</p>
+        <div class="info-list">
+          <div class="info-entry">
+            <span class="info-entry-num">01</span>
+            <div>
+              <strong>Email</strong>
+              <span><a href="mailto:info@cirqon.io" style="color:var(--cyan)">info@cirqon.io</a></span>
+            </div>
+          </div>
+          <div class="info-entry">
+            <span class="info-entry-num">02</span>
+            <div>
+              <strong>Specialties</strong>
+              <span>Embedded systems, PCB design, firmware, validation, reverse engineering, and production readiness.</span>
+            </div>
+          </div>
+          <div class="info-entry">
+            <span class="info-entry-num">03</span>
+            <div>
+              <strong>Response time</strong>
+              <span>We aim to respond to all inquiries within 24–48 hours.</span>
+            </div>
+          </div>
+        </div>
+        <div class="callout-box">
+          <strong>Secure file transfer</strong>
+          <p>Need to share schematics or NDA material? Ask for a secure upload link after your first message.</p>
+          <a class="callout-link" href="mailto:info@cirqon.io?subject=Secure%20Upload%20Request">Request secure link →</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div>
+        <span class="footer-brand">Cirqon Technology</span>
+        <p class="footer-copy">Advanced circuit design and embedded systems solutions for modern electronics. Powering the future with precision.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <a href="#top">Home</a>
+        <a href="#services">Services</a>
+        <a href="#labs">Labs</a>
+        <a href="#about">About</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:info@cirqon.io">info@cirqon.io</a>
+        <a href="#contact">Start a project</a>
+      </div>
+      <div class="footer-col">
+        <h4>Follow</h4>
+        <a href="#">LinkedIn</a>
+        <a href="#">Twitter / X</a>
+        <a href="#">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Cirqon Technology. All rights reserved.</span>
+      <span>Privacy Policy &nbsp;|&nbsp; Terms of Service</span>
+    </div>
+  </div>
+</footer>
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const reveals = document.querySelectorAll(".reveal");
-  if (!("IntersectionObserver" in window)) {
-    reveals.forEach(el => el.classList.add("is-visible"));
-    return;
-  }
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      }
+  // Intersection observer for reveal animations
+  document.addEventListener("DOMContentLoaded", function () {
+    const reveals = document.querySelectorAll(".reveal");
+
+    if (!("IntersectionObserver" in window)) {
+      reveals.forEach(el => el.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // Immediately show hero items
+    document.querySelectorAll(".hero .reveal").forEach((el, i) => {
+      setTimeout(() => el.classList.add("is-visible"), i * 120);
     });
-  }, { threshold: 0.18, rootMargin: "0px 0px -60px 0px" });
-  reveals.forEach(el => observer.observe(el));
-});
+  });
 </script>
 </body>
 </html>
